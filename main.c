@@ -43,10 +43,9 @@ int main(void) {
         guardar_datos_bin("datos.bin", zonas, ZONAS);
     }
 
-    // Clima actual (entrada del usuario)
+   
     Clima clima = leer_clima();
 
-    // Generar reporte
     if (guardar_reporte_txt("reporte_contaminacion.txt", zonas, ZONAS, clima)) {
         printf("\nReporte generado: reporte_contaminacion.txt\n");
         printf("Datos persistidos: datos.bin\n");
@@ -56,3 +55,4 @@ int main(void) {
 
     return 0;
 }
+
