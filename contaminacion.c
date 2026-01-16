@@ -1,6 +1,5 @@
 #include "contaminacion.h"
 
-/* Promedio historico 30 dias */
 Contaminacion promedio_historico(const Zona *z) {
     Contaminacion p = {0, 0, 0, 0};
 
@@ -19,7 +18,6 @@ Contaminacion promedio_historico(const Zona *z) {
     return p;
 }
 
-/* Prediccion simple: promedio ponderado (mas peso a dias recientes) */
 Contaminacion prediccion_ponderada(const Zona *z) {
     Contaminacion p = {0, 0, 0, 0};
     float peso_total = 0.0f;
@@ -42,33 +40,23 @@ Contaminacion prediccion_ponderada(const Zona *z) {
     return p;
 }
 
-/*
- Ajuste simple por clima (cumple requisito sin modelo avanzado):
- - Temperatura alta: +0% a +8% (de 15°C a 35°C aprox)
- - Viento alto: -0% a -12% (de 0 a 10 m/s)
- - Humedad alta: PM2.5 baja leve hasta -6% (de 30% a 90%)
-*/
 Contaminacion ajustar_por_clima(Contaminacion base, Clima c) {
     float f_temp = 1.0f;
     float f_viento = 1.0f;
     float f_humedad_pm = 1.0f;
 
-    // Temperatura: clamp a [15, 35]
     if (c.temperatura < 15.0f) c.temperatura = 15.0f;
     if (c.temperatura > 35.0f) c.temperatura = 35.0f;
     f_temp = 1.0f + ((c.temperatura - 15.0f) / 20.0f) * 0.08f; // hasta +8%
 
-    // Viento: clamp a [0, 10]
     if (c.viento < 0.0f) c.viento = 0.0f;
     if (c.viento > 10.0f) c.viento = 10.0f;
     f_viento = 1.0f - (c.viento / 10.0f) * 0.12f; // hasta -12%
 
-    // Humedad: clamp a [30, 90]
     if (c.humedad < 30.0f) c.humedad = 30.0f;
     if (c.humedad > 90.0f) c.humedad = 90.0f;
     f_humedad_pm = 1.0f - ((c.humedad - 30.0f) / 60.0f) * 0.06f; // hasta -6%
 
-    // Aplicar factores
     base.co2  *= (f_temp * f_viento);
     base.so2  *= (f_temp * f_viento);
     base.no2  *= (f_temp * f_viento);
@@ -147,3 +135,4 @@ int guardar_reporte_txt(const char *ruta, const Zona zonas[], int n, Clima clima
     fclose(f);
     return 1;
 }
+
