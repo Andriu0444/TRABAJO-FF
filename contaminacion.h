@@ -6,7 +6,7 @@
 #define ZONAS 5
 #define DIAS 30
 
-// Limites (referenciales)
+
 #define LIM_CO2  400.0f
 #define LIM_SO2   20.0f
 #define LIM_NO2   40.0f
@@ -30,7 +30,7 @@ typedef struct {
     Contaminacion historial[DIAS];
 } Zona;
 
-/* ====== Logica ====== */
+
 Contaminacion promedio_historico(const Zona *z);
 Contaminacion prediccion_ponderada(const Zona *z);
 Contaminacion ajustar_por_clima(Contaminacion base, Clima c);
@@ -38,10 +38,10 @@ Contaminacion ajustar_por_clima(Contaminacion base, Clima c);
 int hay_alerta(Contaminacion c);
 void escribir_recomendaciones(FILE *f);
 
-/* ====== Archivos ====== */
 int guardar_datos_bin(const char *ruta, const Zona zonas[], int n);
 int cargar_datos_bin(const char *ruta, Zona zonas[], int n);
 
 int guardar_reporte_txt(const char *ruta, const Zona zonas[], int n, Clima clima_actual);
 
 #endif
+
